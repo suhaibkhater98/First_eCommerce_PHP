@@ -43,7 +43,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $errors[] = "Password Empty";
     } 
     if(count($errors) == 0 ){
-        if(checkItem("Username" , "users" ,$name) == 0){
+        $record = $conn->prepare("SELECT * FROM users WHERE Username = ?");
+        $record->execute(array($name));
+        if($record->rowCount() == 0){
         
             $stmt = $conn->prepare("INSERT INTO users (Username, Password, Email , Regstatus , Regsdate)
             VALUES( ? , ? , ? , ? , ?)");
@@ -62,16 +64,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         <h1 class="text-center"><span data-class="login" class="active">Login</span> | 
         <span data-class="signup">SigUp</span></h1>
         <form class="login" action="" method="POST">
-            <input class="form-control" type="text" name="name" autocomplete="off">
-            <input class="form-control" type="password" name="pass">
+            <input class="form-control" type="text" name="name" autocomplete="off" placeholder="Inter Username">
+            <input class="form-control" type="password" name="pass" placeholder="Password">
             <input class="btn btn-primary btn-block" type="submit" name="login" value="Login">
         </form>
 
 
         <form class="signup" action="" method="POST">
-            <div class="input-container"><input class="form-control" type="text" name="name" ></div>
-            <div class="input-container"><input class="form-control" type="password" name="pass" required></div>
-            <div class="input-container"><input class="form-control" type="email" name="email" ></div>
+            <div class="input-container"><input class="form-control" type="text" name="name" placeholder="Inter a Username"></div>
+            <div class="input-container"><input class="form-control" type="password" name="pass" required placeholder="Inter Password"></div>
+            <div class="input-container"><input class="form-control" type="email" name="email" placeholder="Inter an Email"></div>
             <input class="btn btn-success btn-block" type="submit" name="signup" value="SignUp">
         </form>
         <div class="the-error text-center">
